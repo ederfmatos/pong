@@ -3,11 +3,11 @@ const ctx = canvas.getContext('2d');
 
 // Game constants
 const PADDLE_WIDTH = 14;
-const PADDLE_HEIGHT = 100;
-const PADDLE_MARGIN = 20;
+const PADDLE_HEIGHT = 160;
+const PADDLE_MARGIN = 25;
 const BALL_SIZE = 16;
-const BALL_SPEED = 5;
-const AI_SPEED = 4;
+let BALL_SPEED = 15;
+const AI_SPEED = 6;
 const FPS = 60;
 
 // Game state
@@ -137,11 +137,13 @@ function update() {
     if (ball.x < 0) {
         rightScore++;
         document.getElementById('right-score').textContent = rightScore;
+        BALL_SPEED = 15; // Reset ball speed to 10 when there's a goal
         resetBall(1);
     }
     if (ball.x + ball.size > canvas.width) {
         leftScore++;
         document.getElementById('left-score').textContent = leftScore;
+        BALL_SPEED = 15; // Reset ball speed to 10 when there's a goal
         resetBall(-1);
     }
 
@@ -153,8 +155,17 @@ function update() {
 function loop() {
     update();
     draw();
+    document.getElementById('ball-speed').textContent = Math.round(BALL_SPEED * 10) / 10;
     requestAnimationFrame(loop);
 }
+
+setInterval(() => {
+    BALL_SPEED++;
+
+    if (BALL_SPEED >= 40) {
+        BALL_SPEED = 15;
+    }
+}, 1500)
 
 // Start game
 loop();
